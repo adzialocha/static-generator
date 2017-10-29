@@ -1,7 +1,7 @@
 {
   "name": "static-generator",
   "version": "0.1.0",
-  "description": "Simplest static page generator equipped with es6, scss, markdown and pug",
+  "description": "Node command line application equipped with great tools for generating the most simple static page",
   "main": "static-generator",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
