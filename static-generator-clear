@@ -29,8 +29,8 @@ program
   )
   .parse(process.argv)
 
-const outDir = join(__dirname, program.output_dir)
-const srcDir = join(__dirname, program.source_dir)
+const outDir = program.output_dir
+const srcDir = program.source_dir
 
 console.log(chalk.bold('clear generated files'))
 console.log(`output_dir=${chalk.blue(outDir)}`)

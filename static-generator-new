@@ -22,7 +22,7 @@ program
   )
   .parse(process.argv)
 
-const srcDir = join(__dirname, program.source_dir)
+const srcDir = program.source_dir
 
 console.log(chalk.bold('create new folder for static page sources'))
 console.log(`source_dir=${chalk.blue(srcDir)}`)
