@@ -1,11 +1,11 @@
-const renderHtml = require('./renderHtml')
-const renderImages = require('./renderImages')
-const renderScripts = require('./renderScripts')
-const renderStyles = require('./renderStyles')
+const buildHtml = require('./buildHtml')
+const buildScripts = require('./buildScripts')
+const buildStyles = require('./buildStyles')
+const copyImages = require('./copyImages')
 
 module.exports = {
-  renderHtml,
-  renderImages,
-  renderScripts,
-  renderStyles,
+  buildHtml,
+  buildScripts,
+  buildStyles,
+  copyImages,
 }

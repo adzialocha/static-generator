@@ -1,11 +1,11 @@
-const chalk = require('chalk')
 const browserify = require('browserify')
+const chalk = require('chalk')
 
-const lib = require('../lib')
+const { createFile } = require('../utils')
 
-function convert(file) {
+function convertAndMinify(srcFile) {
   return new Promise((resolve, reject) => {
-    browserify(file)
+    browserify(srcFile)
       .transform('babelify', { presets: ['env'] })
       .transform('uglifyify', { global: true })
       .bundle((err, buffer) => {
@@ -18,14 +18,17 @@ function convert(file) {
   })
 }
 
-module.exports = (file, targetFile) => {
+module.exports = (srcFile, outFile) => {
   console.log('')
   console.log(chalk.bold('✓ generate js assets'))
 
   return new Promise((resolve, reject) => {
-    convert(file)
+    Promise.resolve()
+      .then(() => {
+        return convertAndMinify(srcFile)
+      })
       .then(minified => {
-        return lib.createFile(targetFile, minified)
+        return createFile(outFile, minified)
       })
       .then(() => {
         console.log(chalk.green('... done!'))

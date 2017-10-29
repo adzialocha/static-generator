@@ -2,12 +2,12 @@ const chalk = require('chalk')
 const CleanCSS = require('clean-css')
 const sass = require('node-sass')
 
-const lib = require('../lib')
+const { createFile } = require('../utils')
 
-function convert(file) {
+function convert(srcFile) {
   return new Promise((resolve, reject) => {
     sass.render({
-      file,
+      file: srcFile,
     }, (err, result) => {
       if (err) {
         reject(err)
@@ -18,23 +18,26 @@ function convert(file) {
   })
 }
 
-function clean(css) {
+function minify(css) {
   return new CleanCSS({
     returnPromise: true,
   }).minify(css)
 }
 
-module.exports = (file, targetFile) => {
+module.exports = (srcFile, outFile) => {
   console.log('')
   console.log(chalk.bold('✓ generate style assets'))
 
   return new Promise((resolve, reject) => {
-    convert(file)
+    Promise.resolve()
+      .then(() => {
+        return convert(srcFile)
+      })
       .then(css => {
-        return clean(css)
+        return minify(css)
       })
       .then(cleanedCss => {
-        return lib.createFile(targetFile, cleanedCss.styles)
+        return createFile(outFile, cleanedCss.styles)
       })
       .then(() => {
         console.log(chalk.green('... done!'))

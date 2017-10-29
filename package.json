@@ -4,6 +4,7 @@
   "description": "Node command line application equipped with great tools for generating the most simple static page",
   "main": "static-generator",
   "scripts": {
+    "lint": "eslint '**/*.js' 'static-generator*'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
@@ -31,21 +32,20 @@
     "babelify": "^8.0.0",
     "browserify": "^14.5.0",
     "chalk": "^2.3.0",
-    "child-process-promise": "^2.2.1",
     "clean-css": "^4.1.9",
     "commander": "^2.11.0",
+    "cpx": "^1.5.0",
     "html-minifier": "^3.5.6",
-    "imagemin": "^5.3.1",
-    "imagemin-jpegtran": "^5.0.2",
-    "imagemin-pngquant": "^5.0.1",
-    "imagemin-svgo": "^5.2.2",
     "marked": "^0.3.6",
     "ncp": "^2.0.0",
     "node-sass": "^4.5.3",
     "nunjucks": "^3.0.1",
     "rimraf": "^2.6.2",
-    "uglify-js": "^3.1.6",
     "uglifyify": "^4.0.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-eslint": "^8.0.1",
+    "eslint": "^4.10.0",
+    "eslint-plugin-babel": "^4.1.2"
+  }
 }

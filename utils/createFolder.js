@@ -1,10 +1,10 @@
-const fs = require('fs')
+const { mkdir } = require('fs')
 
-module.exports = (path, mask = 0777) => {
+module.exports = createFolder = (path, mask = '0777') => {
   return new Promise((resolve, reject) => {
-    fs.mkdir(path, mask, function(err) {
+    mkdir(path, mask, err => {
       if (err) {
-        if (err.code == 'EEXIST') {
+        if (err.code === 'EEXIST') {
           resolve()
         } else {
           reject(err)

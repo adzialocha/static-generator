@@ -1,8 +1,8 @@
-const rimraf = require('rimraf')
+const { writeFile } = require('fs')
 
-module.exports = path => {
+module.exports = createFile = (file, content = '') => {
   return new Promise((resolve, reject) => {
-    rimraf(path, {}, err => {
+    writeFile(file, content, err => {
       if (err) {
         reject(err)
       } else {

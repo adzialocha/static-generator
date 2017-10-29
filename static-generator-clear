@@ -1,42 +1,63 @@
 #!/usr/bin/env node
 
-const SOURCE_DIR_PATH = '_src'
-const OUTPUT_DIR_PATH = './'
-
 const chalk = require('chalk')
-const fs = require('fs')
-const path = require('path')
 const program = require('commander')
+const { existsSync } = require('fs')
+const { join } = require('path')
 
-const tasks = require('./tasks')
-const lib = require('./lib')
+const {
+  getAllFolders,
+  remove,
+} = require('./utils')
+
+const DEFAULT_OUTPUT_DIR = './'
+const DEFAULT_SOURCE_DIR = './_src'
+
+const ASSETS_DIR = 'assets'
+const VIEWS_DIR = 'views'
 
 program
   .option(
-    '-t, --target <path>',
-    `path to source folder, defaults to "${SOURCE_DIR_PATH}"`,
-    SOURCE_DIR_PATH
+    '-s, --source_dir <path>',
+    `path to source folder, defaults to "${DEFAULT_SOURCE_DIR}"`,
+    DEFAULT_SOURCE_DIR
+  )
+  .option(
+    '-o, --output_dir <path>',
+    `output folder path, defaults to "${DEFAULT_OUTPUT_DIR}"`,
+    DEFAULT_OUTPUT_DIR
   )
   .parse(process.argv)
 
-const { target } = program
+const outDir = join(__dirname, program.output_dir)
+const srcDir = join(__dirname, program.source_dir)
 
 console.log(chalk.bold('clear generated files'))
-console.log(`target=${chalk.blue(target)}`)
+console.log(`output_dir=${chalk.blue(outDir)}`)
+console.log(`source_dir=${chalk.blue(srcDir)}`)
+console.log('')
 
-if (!fs.existsSync(target)) {
-  console.error(chalk.red('Error: could not find source folder!'))
+if (!existsSync(srcDir)) {
+  console.error(chalk.red('Error: could not find source folder.'))
   process.exit(1)
 }
 
-const assetsDir = path.join(OUTPUT_DIR_PATH, 'assets')
+if (!existsSync(outDir)) {
+  console.error(chalk.red('Error: could not find output folder.'))
+  process.exit(1)
+}
 
-console.log('')
-console.log(chalk.bold('✓ delete assets folder'))
+const outAssetsDir = join(outDir, ASSETS_DIR)
 
-lib.remove(assetsDir)
+Promise.resolve()
   .then(() => {
-    const viewSlugs = lib.getAllFolders(path.join(target, 'views')).map(views => {
+    // Remove assets folder
+    console.log(chalk.bold('✓ delete assets folder'))
+    return remove(outAssetsDir)
+  })
+  .then(() => {
+    // Remove sub view folders
+    const viewSlugs = getAllFolders(join(srcDir, VIEWS_DIR)).map(views => {
       const splitted = views.split('/')
       return splitted[splitted.length - 1]
     })
@@ -47,7 +68,7 @@ lib.remove(assetsDir)
           console.log('')
           console.log(chalk.bold(`✓ delete "${slug}" view folder`))
 
-          lib.remove(path.join(OUTPUT_DIR_PATH, slug))
+          remove(join(outDir, slug))
             .then(() => {
               resolve()
             })
@@ -59,16 +80,19 @@ lib.remove(assetsDir)
     )
   })
   .then(() => {
+    // Remove root html file
     console.log('')
     console.log(chalk.bold('✓ delete index.html root file'))
-    return lib.remove(path.join(OUTPUT_DIR_PATH, 'index.html'))
+    return remove(join(outDir, 'index.html'))
   })
   .then(() => {
     console.log('')
     console.log(chalk.blue('( ͡° ͜ʖ ͡°) done!'))
   })
   .catch((err) => {
+    console.log('')
     console.error(chalk.red(err))
     console.log('')
-    console.error(chalk.red('Task failed!'))
+    console.error(chalk.red('An error occurred!'))
+    process.exit(1)
   })

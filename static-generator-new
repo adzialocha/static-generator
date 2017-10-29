@@ -1,41 +1,44 @@
 #!/usr/bin/env node
 
-const SOURCE_DIR_PATH = '_src'
-const TEMPLATE_DIR_PATH = './node_modules/static-generator/template'
-
 const chalk = require('chalk')
-const fs = require('fs')
-const ncp = require('ncp').ncp
 const program = require('commander')
+const { existsSync } = require('fs')
+const { join } = require('path')
+const { ncp } = require('ncp')
 
-program
-  .option(
-    '-t, --target <path>',
-    `path to source folder, defaults to "${SOURCE_DIR_PATH}"`,
-    SOURCE_DIR_PATH
-  )
-  .parse(process.argv)
+const DEFAULT_SOURCE_DIR = './_src'
 
-const { target } = program
+let templateDirPath = './node_modules/static-generator/template'
 
-console.log(chalk.bold('create new folder for static page sources'))
-console.log(`target=${chalk.blue(target)}`)
-console.log('')
-
-if (fs.existsSync(target)) {
-  console.error(chalk.red('Error: source folder already exists'))
-  process.exit(1)
-}
-
-let templateDirPath = TEMPLATE_DIR_PATH
-
-if (!fs.existsSync(templateDirPath)) {
+if (!existsSync(templateDirPath)) {
   templateDirPath = 'template'
 }
 
-ncp(templateDirPath, target, err => {
+program
+  .option(
+    '-s, --source_dir <path>',
+    `path to source folder, defaults to "${DEFAULT_SOURCE_DIR}"`,
+    DEFAULT_SOURCE_DIR
+  )
+  .parse(process.argv)
+
+const srcDir = join(__dirname, program.source_dir)
+
+console.log(chalk.bold('create new folder for static page sources'))
+console.log(`source_dir=${chalk.blue(srcDir)}`)
+console.log('')
+
+if (existsSync(srcDir)) {
+  console.error(chalk.red('Error: source folder already exists.'))
+  process.exit(1)
+}
+
+// Copy templates folder to output directory
+ncp(templateDirPath, srcDir, err => {
   if (err) {
-    console.error(chalk.red('Task failed!'))
+    console.error(chalk.red(err))
+    console.log('')
+    console.error(chalk.red('An error occurred!'))
     process.exit(1)
   } else {
     console.log(chalk.blue('( ͡° ͜ʖ ͡°) done!'))
