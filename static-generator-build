@@ -5,6 +5,7 @@ const OUTPUT_DIR_PATH = './'
 
 const chalk = require('chalk')
 const fs = require('fs')
+const ncp = require('ncp')
 const path = require('path')
 const program = require('commander')
 
@@ -51,6 +52,24 @@ lib.createFolder(assetsDir)
     const jsMainFile = path.join(target, 'assets', 'scripts', 'app.js')
     const jsOutFile = path.join(assetsDir, 'scripts', 'app.js')
     return tasks.renderScripts(jsMainFile, jsOutFile)
+  })
+  .then(() => {
+    const imageFolder = path.join(target, 'assets', 'images')
+    const imageOutFolder = path.join(assetsDir, 'images')
+
+    return new Promise((resolve, reject) => {
+      ncp(imageFolder, imageOutFolder, err => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
+  })
+  .then(() => {
+    const imageFolder = path.join(assetsDir, 'images')
+    return tasks.renderImages(imageFolder, imageFolder)
   })
   .then(() => {
     return tasks.renderHtml(target, OUTPUT_DIR_PATH)
