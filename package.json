@@ -42,5 +42,6 @@
     "rimraf": "^2.6.2",
     "uglify-js": "^3.1.6",
     "uglifyify": "^4.0.4"
-  }
+  },
+  "devDependencies": {}
 }

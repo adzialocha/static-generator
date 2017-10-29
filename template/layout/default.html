@@ -21,12 +21,12 @@
 </head>
 <body>
   <header>
-    {% if heading %}<h1>{{ heading }}</h1>{% endif %}
-    <hr>
+    <h1><a href="/">{{ meta.title }}</a></h1>
     {% include "navigation.html" %}
     <hr>
   </header>
   <main>
+    {% if heading %}<h2>{{ heading }}</h2>{% endif %}
     {{ content | safe }}
   </main>
   <footer>

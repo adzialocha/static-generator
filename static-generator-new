@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const SOURCE_DIR_PATH = '_src'
-const TEMPLATE_DIR_PATH = './template'
+const TEMPLATE_DIR_PATH = './node_modules/static-generator/template'
 
 const chalk = require('chalk')
 const fs = require('fs')
@@ -27,7 +27,13 @@ if (fs.existsSync(target)) {
   process.exit(1)
 }
 
-ncp(TEMPLATE_DIR_PATH, target, err => {
+let templateDirPath = TEMPLATE_DIR_PATH
+
+if (!fs.existsSync(templateDirPath)) {
+  templateDirPath = 'template'
+}
+
+ncp(templateDirPath, target, err => {
   if (err) {
     console.error(chalk.red('Task failed!'))
     process.exit(1)
