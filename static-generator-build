@@ -1,0 +1,25 @@
+#!/usr/bin/env node
+
+const SOURCE_DIR_PATH = '_src'
+
+const chalk = require('chalk')
+const fs = require('fs')
+const program = require('commander')
+
+program
+  .option(
+    '-t, --target <path>',
+    `path to source folder, defaults to "${SOURCE_DIR_PATH}"`,
+    SOURCE_DIR_PATH
+  )
+  .parse(process.argv)
+
+const { target } = program
+
+console.log(chalk.bold('build static page for hosting'))
+console.log(`target=${chalk.blue(target)}`)
+
+if (!fs.existsSync(target)) {
+  console.error(chalk.red('Error: could not find source folder!'))
+  process.exit(1)
+}

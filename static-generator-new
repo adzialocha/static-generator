@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+const SOURCE_DIR_PATH = '_src'
+const TEMPLATE_DIR_PATH = './template'
+
+const chalk = require('chalk')
+const fs = require('fs')
+const ncp = require('ncp').ncp
+const program = require('commander')
+
+program
+  .option(
+    '-t, --target <path>',
+    `path to source folder, defaults to "${SOURCE_DIR_PATH}"`,
+    SOURCE_DIR_PATH
+  )
+  .parse(process.argv)
+
+const { target } = program
+
+console.log(chalk.bold('create new folder for static page sources'))
+console.log(`target=${chalk.blue(target)}`)
+
+if (fs.existsSync(target)) {
+  console.error(chalk.red('Error: source folder already exists'))
+  process.exit(1)
+}
+
+ncp(TEMPLATE_DIR_PATH, target, err => {
+  if (err) {
+    console.error(chalk.red('Task failed'))
+    process.exit(1)
+  } else {
+    console.log(chalk.blue('( ͡° ͜ʖ ͡°) done!'))
+  }
+})

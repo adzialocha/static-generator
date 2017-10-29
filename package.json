@@ -1,0 +1,34 @@
+{
+  "name": "static-generator",
+  "version": "0.1.0",
+  "description": "Simplest static page generator equipped with es6, scss, markdown and pug",
+  "main": "static-generator",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "static-generator": "static-generator"
+  },
+  "keywords": [
+    "static",
+    "page",
+    "generator",
+    "es6",
+    "scss",
+    "markdown",
+    "pug",
+    "template"
+  ],
+  "author": "adzialocha",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adzialocha/static-generator.git"
+  },
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "child-process-promise": "^2.2.1",
+    "commander": "^2.11.0",
+    "ncp": "^2.0.0"
+  }
+}

@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const program = require('commander')
+
+const pkg = require('./package.json')
+
+program
+  .version(pkg.version)
+  .description('Simplest static page generator')
+  .command('new', 'create basic folder for static page sources').alias('n')
+  .command('build', 'build static page for hosting').alias('b')
+  .parse(process.argv)
