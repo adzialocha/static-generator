@@ -34,8 +34,12 @@
     "child-process-promise": "^2.2.1",
     "clean-css": "^4.1.9",
     "commander": "^2.11.0",
+    "html-minifier": "^3.5.6",
+    "marked": "^0.3.6",
     "ncp": "^2.0.0",
     "node-sass": "^4.5.3",
+    "nunjucks": "^3.0.1",
+    "rimraf": "^2.6.2",
     "uglify-js": "^3.1.6",
     "uglifyify": "^4.0.4"
   }

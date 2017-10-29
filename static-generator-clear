@@ -21,7 +21,7 @@ program
 
 const { target } = program
 
-console.log(chalk.bold('build static page for hosting'))
+console.log(chalk.bold('clear generated files'))
 console.log(`target=${chalk.blue(target)}`)
 
 if (!fs.existsSync(target)) {
@@ -30,30 +30,38 @@ if (!fs.existsSync(target)) {
 }
 
 const assetsDir = path.join(OUTPUT_DIR_PATH, 'assets')
-const assetsStylesDir = path.join(assetsDir, 'styles')
-const assetsScriptsDir = path.join(assetsDir, 'scripts')
-const assetsImagesDir = path.join(assetsDir, 'images')
 
-lib.createFolder(assetsDir)
+console.log('')
+console.log(chalk.bold('✓ delete assets folder'))
+
+lib.remove(assetsDir)
   .then(() => {
-    return Promise.all([
-      lib.createFolder(assetsStylesDir),
-      lib.createFolder(assetsScriptsDir),
-      lib.createFolder(assetsImagesDir)
-    ])
+    const viewSlugs = lib.getAllFolders(path.join(target, 'views')).map(views => {
+      const splitted = views.split('/')
+      return splitted[splitted.length - 1]
+    })
+
+    return Promise.all(
+      viewSlugs.map(slug => {
+        return new Promise((resolve, reject) => {
+          console.log('')
+          console.log(chalk.bold(`✓ delete "${slug}" view folder`))
+
+          lib.remove(path.join(OUTPUT_DIR_PATH, slug))
+            .then(() => {
+              resolve()
+            })
+            .catch(err => {
+              reject(err)
+            })
+        })
+      })
+    )
   })
   .then(() => {
-    const scssMainFile = path.join(target, 'assets', 'styles', 'app.scss')
-    const scssOutFile = path.join(assetsDir, 'styles', 'app.css')
-    return tasks.renderStyles(scssMainFile, scssOutFile)
-  })
-  .then(() => {
-    const jsMainFile = path.join(target, 'assets', 'scripts', 'app.js')
-    const jsOutFile = path.join(assetsDir, 'scripts', 'app.js')
-    return tasks.renderScripts(jsMainFile, jsOutFile)
-  })
-  .then(() => {
-    return tasks.renderHtml(target, OUTPUT_DIR_PATH)
+    console.log('')
+    console.log(chalk.bold('✓ delete index.html root file'))
+    return lib.remove(path.join(OUTPUT_DIR_PATH, 'index.html'))
   })
   .then(() => {
     console.log('')

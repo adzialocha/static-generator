@@ -9,4 +9,5 @@ program
   .description('Simplest static page generator')
   .command('new', 'create basic folder for static page sources').alias('n')
   .command('build', 'build static page for hosting').alias('b')
+  .command('clear', 'clear generated files').alias('c')
   .parse(process.argv)
