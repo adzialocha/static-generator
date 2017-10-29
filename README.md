@@ -5,10 +5,11 @@ Node command line application equipped with great tools for generating the most 
 
 ## Features
 
-- es6 (via babel) and scss
+- es6 via babelify and modules via browserify
+- scss and css-clean
 - markdown content
 - json data
-- pug template engine
+- nunjucks template engine
 - minified output
 
 ## Usage

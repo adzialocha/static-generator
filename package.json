@@ -16,7 +16,7 @@
     "es6",
     "scss",
     "markdown",
-    "pug",
+    "nunjucks",
     "template"
   ],
   "author": "adzialocha",
@@ -26,9 +26,17 @@
     "url": "git+https://github.com/adzialocha/static-generator.git"
   },
   "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "browserify": "^14.5.0",
     "chalk": "^2.3.0",
     "child-process-promise": "^2.2.1",
+    "clean-css": "^4.1.9",
     "commander": "^2.11.0",
-    "ncp": "^2.0.0"
+    "ncp": "^2.0.0",
+    "node-sass": "^4.5.3",
+    "uglify-js": "^3.1.6",
+    "uglifyify": "^4.0.4"
   }
 }

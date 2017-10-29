@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
 const SOURCE_DIR_PATH = '_src'
+const OUTPUT_DIR_PATH = './'
 
 const chalk = require('chalk')
 const fs = require('fs')
+const path = require('path')
 const program = require('commander')
+
+const tasks = require('./tasks')
+const lib = require('./lib')
 
 program
   .option(
@@ -23,3 +28,39 @@ if (!fs.existsSync(target)) {
   console.error(chalk.red('Error: could not find source folder!'))
   process.exit(1)
 }
+
+const assetsDir = path.join(OUTPUT_DIR_PATH, 'assets')
+const assetsStylesDir = path.join(assetsDir, 'styles')
+const assetsScriptsDir = path.join(assetsDir, 'scripts')
+const assetsImagesDir = path.join(assetsDir, 'images')
+
+lib.createFolder(assetsDir)
+  .then(() => {
+    return Promise.all([
+      lib.createFolder(assetsStylesDir),
+      lib.createFolder(assetsScriptsDir),
+      lib.createFolder(assetsImagesDir)
+    ])
+  })
+  .then(() => {
+    const scssMainFile = path.join(target, 'assets', 'styles', 'app.scss')
+    const scssOutFile = path.join(assetsDir, 'styles', 'app.css')
+    return tasks.renderStyles(scssMainFile, scssOutFile)
+  })
+  .then(() => {
+    const jsMainFile = path.join(target, 'assets', 'scripts', 'app.js')
+    const jsOutFile = path.join(assetsDir, 'scripts', 'app.js')
+    return tasks.renderScripts(jsMainFile, jsOutFile)
+  })
+  .then(() => {
+    return tasks.renderHtml()
+  })
+  .then(() => {
+    console.log('')
+    console.log(chalk.blue('( ͡° ͜ʖ ͡°) done!'))
+  })
+  .catch((err) => {
+    console.error(chalk.red(err))
+    console.log('')
+    console.error(chalk.red('Task failed!'))
+  })

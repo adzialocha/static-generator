@@ -20,6 +20,7 @@ const { target } = program
 
 console.log(chalk.bold('create new folder for static page sources'))
 console.log(`target=${chalk.blue(target)}`)
+console.log('')
 
 if (fs.existsSync(target)) {
   console.error(chalk.red('Error: source folder already exists'))
@@ -28,7 +29,7 @@ if (fs.existsSync(target)) {
 
 ncp(TEMPLATE_DIR_PATH, target, err => {
   if (err) {
-    console.error(chalk.red('Task failed'))
+    console.error(chalk.red('Task failed!'))
     process.exit(1)
   } else {
     console.log(chalk.blue('( ͡° ͜ʖ ͡°) done!'))
