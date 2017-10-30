@@ -9,6 +9,7 @@ const {
   buildHtml,
   buildScripts,
   buildStyles,
+  copyFonts,
   copyImages,
 } = require('./tasks')
 
@@ -21,6 +22,7 @@ const DEFAULT_OUTPUT_DIR = './'
 const DEFAULT_SOURCE_DIR = './_src'
 
 const ASSETS_DIR = 'assets'
+const FONTS_DIR = 'fonts'
 const IMAGES_DIR = 'images'
 const SCRIPTS_DIR = 'scripts'
 const STYLES_DIR = 'styles'
@@ -70,34 +72,61 @@ Promise.resolve()
     return createFolder(outAssetsDir)
   })
   .then(() => {
-    // Create sub-folders for assets
-    const outAssetsStylesDir = join(outAssetsDir, STYLES_DIR)
-    const outAssetsScriptsDir = join(outAssetsDir, SCRIPTS_DIR)
-    const outAssetsImagesDir = join(outAssetsDir, IMAGES_DIR)
-
-    return Promise.all([
-      createFolder(outAssetsStylesDir),
-      createFolder(outAssetsScriptsDir),
-      createFolder(outAssetsImagesDir),
-    ])
-  })
-  .then(() => {
     // Convert and minify styles
+    const srcAssetsStylesDir = join(srcAssetsDir, STYLES_DIR)
+    const outAssetsStylesDir = join(outAssetsDir, STYLES_DIR)
+
+    if (!fs.existsSync(srcAssetsStylesDir)) {
+      return Promise.resolve()
+    }
+
     const srcStylesFile = join(srcAssetsDir, STYLES_DIR, `${ENTRY_FILE}.scss`)
     const outStylesFile = join(outAssetsDir, STYLES_DIR, `${ENTRY_FILE}.css`)
 
-    return buildStyles(srcStylesFile, outStylesFile)
+    return Promise.all([
+      createFolder(outAssetsStylesDir),
+      buildStyles(srcStylesFile, outStylesFile),
+    ])
   })
   .then(() => {
     // Bundle, compile and minify scripts
+    const srcAssetsScriptsDir = join(srcAssetsDir, SCRIPTS_DIR)
+    const outAssetsScriptsDir = join(outAssetsDir, SCRIPTS_DIR)
+
+    if (!fs.existsSync(srcAssetsScriptsDir)) {
+      return Promise.resolve()
+    }
+
     const srcScriptsFile = join(srcAssetsDir, SCRIPTS_DIR, `${ENTRY_FILE}.js`)
     const outScriptsFile = join(outAssetsDir, SCRIPTS_DIR, `${ENTRY_FILE}.js`)
 
-    return buildScripts(srcScriptsFile, outScriptsFile)
+    return Promise.all([
+      createFolder(outAssetsScriptsDir),
+      buildScripts(srcScriptsFile, outScriptsFile),
+    ])
   })
   .then(() => {
     // Copy images
-    return copyImages(srcDir, outDir)
+    const outAssetsImagesDir = join(outAssetsDir, IMAGES_DIR)
+
+    return Promise.all([
+      createFolder(outAssetsImagesDir),
+      copyImages(srcDir, outDir),
+    ])
+  })
+  .then(() => {
+    // Copy fonts
+    const srcFontsDir = join(srcAssetsDir, FONTS_DIR)
+    const outFontsDir = join(outAssetsDir, FONTS_DIR)
+
+    if (!fs.existsSync(srcFontsDir)) {
+      return Promise.resolve()
+    }
+
+    return Promise.all([
+      createFolder(outFontsDir),
+      copyFonts(srcFontsDir, outFontsDir),
+    ])
   })
   .then(() => {
     // Generate and minify html views

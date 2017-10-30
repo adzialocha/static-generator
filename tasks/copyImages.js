@@ -1,32 +1,12 @@
 const chalk = require('chalk')
-const glob = require('glob')
 const { join } = require('path')
 
-const { copyFile, getAllFolders } = require('../utils')
+const { copyFilesWithPattern, getAllFolders } = require('../utils')
 
-const GLOB_PATTERN = '**/*.{ico,gif,jpg,png,svg}'
+const GLOB_PATTERN = '*.{ico,gif,jpg,png,svg}'
 
 function copyImages(srcDir, outDir) {
-  return new Promise((resolve, reject) => {
-    glob(`${srcDir}/${GLOB_PATTERN}`, (globErr, files) => {
-      if (globErr) {
-        reject(globErr)
-      } else {
-        Promise.all(files.map(file => {
-          const splitted = file.split('/')
-          const fileName = splitted[splitted.length - 1]
-
-          return copyFile(file, join(outDir, fileName))
-        }))
-          .then(() => {
-            resolve()
-          })
-          .catch(err => {
-            reject(err)
-          })
-      }
-    })
-  })
+  return copyFilesWithPattern(srcDir, outDir, GLOB_PATTERN)
 }
 
 function copyViewImages(srcDir, outDir) {
