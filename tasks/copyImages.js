@@ -1,18 +1,58 @@
 const chalk = require('chalk')
-const cpx = require('cpx')
+const glob = require('glob')
+const { join } = require('path')
+
+const { copyFile, getAllFolders } = require('../utils')
 
 const GLOB_PATTERN = '**/*.{ico,gif,jpg,png,svg}'
 
 function copyImages(srcDir, outDir) {
   return new Promise((resolve, reject) => {
-    cpx.copy(`${srcDir}/${GLOB_PATTERN}`, outDir, err => {
-      if (err) {
-        reject(err)
+    glob(`${srcDir}/${GLOB_PATTERN}`, (globErr, files) => {
+      if (globErr) {
+        reject(globErr)
       } else {
-        resolve()
+        Promise.all(files.map(file => {
+          const splitted = file.split('/')
+          const fileName = splitted[splitted.length - 1]
+
+          return copyFile(file, join(outDir, fileName))
+        }))
+          .then(() => {
+            resolve()
+          })
+          .catch(err => {
+            reject(err)
+          })
       }
     })
   })
+}
+
+function copyViewImages(srcDir, outDir) {
+  const srcViewsDir = join(srcDir, 'views')
+  const views = getAllFolders(srcViewsDir)
+
+  const promises = views.map(srcViewDir => {
+    const splitted = srcViewDir.split('/')
+    const viewSlug = splitted[splitted.length - 1]
+    const outViewDir = join(outDir, viewSlug)
+
+    return new Promise((resolve, reject) => {
+      createFolder(outViewDir)
+        .then(() => {
+          copyImages(srcViewDir, outViewDir)
+        })
+        .then(() => {
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  })
+
+  return Promise.all(promises)
 }
 
 module.exports = (srcDir, outDir) => {
@@ -22,7 +62,13 @@ module.exports = (srcDir, outDir) => {
   return new Promise((resolve, reject) => {
     Promise.resolve()
       .then(() => {
-        return copyImages(srcDir, outDir)
+        const srcAssetsDir = join(srcDir, 'assets', 'images')
+        const outAssetsDir = join(outDir, 'assets', 'images')
+
+        return copyImages(srcAssetsDir, outAssetsDir)
+      })
+      .then(() => {
+        return copyViewImages(srcDir, outDir)
       })
       .then(() => {
         console.log(chalk.green('... done!'))
