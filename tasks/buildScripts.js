@@ -6,7 +6,7 @@ const { createFile } = require('../utils')
 function convertAndMinify(srcFile) {
   return new Promise((resolve, reject) => {
     browserify(srcFile)
-      .transform('babelify', { presets: ['env'] })
+      .transform('babelify', { presets: ['@babel/preset-env'] })
       .transform('uglifyify', { global: true })
       .bundle((err, buffer) => {
         if (err) {
