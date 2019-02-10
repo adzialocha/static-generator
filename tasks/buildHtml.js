@@ -19,13 +19,6 @@ const TARGET_FILE = 'index.html'
 // Custom marked renderer
 const renderer = new marked.Renderer()
 
-renderer.link = (href, title, text) => {
-  if (title) {
-    return `<a href="${href}" title="${title}" target="_blank">${text}</a>`
-  }
-  return `<a href="${href}" target="_blank">${text}</a>`
-}
-
 function readDataFile(srcViewDir) {
   const file = join(srcViewDir, DATA_FILE_NAME)
 
