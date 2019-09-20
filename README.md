@@ -58,3 +58,7 @@ layout/ *
     navigation.html
     ... more partials
 ```
+
+## License
+
+`MIT`
