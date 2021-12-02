@@ -1,6 +1,6 @@
 const chalk = require('chalk')
 const CleanCSS = require('clean-css')
-const sass = require('node-sass')
+const sass = require('sass')
 
 const { createFile } = require('../utils')
 
