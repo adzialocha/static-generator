@@ -1,6 +1,6 @@
 {
   "name": "static-generator",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Node command line application equipped with great tools for generating the most simple static page",
   "main": "static-generator",
   "scripts": {
