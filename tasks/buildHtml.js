@@ -1,9 +1,9 @@
 const chalk = require('chalk')
 const htmlMinifier = require('html-minifier').minify
-const marked = require('marked')
 const nunjucks = require('nunjucks')
 const { existsSync, readFile } = require('fs')
 const { join } = require('path')
+const { marked } = require('marked')
 
 const {
   createFile,
