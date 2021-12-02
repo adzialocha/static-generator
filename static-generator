@@ -5,6 +5,7 @@ const program = require('commander')
 const pkg = require('./package.json')
 
 program
+  .storeOptionsAsProperties()
   .version(pkg.version)
   .description('Simplest static page generator')
   .command('new', 'create folder for static page sources').alias('n')

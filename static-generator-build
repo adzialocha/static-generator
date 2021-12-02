@@ -30,6 +30,7 @@ const STYLES_DIR = 'styles'
 const ENTRY_FILE = 'app'
 
 program
+  .storeOptionsAsProperties()
   .option(
     '-s, --source_dir <path>',
     `path to source folder, defaults to "${DEFAULT_SOURCE_DIR}"`,

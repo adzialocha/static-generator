@@ -17,6 +17,7 @@ const ASSETS_DIR = 'assets'
 const VIEWS_DIR = 'views'
 
 program
+  .storeOptionsAsProperties()
   .option(
     '-s, --source_dir <path>',
     `path to source folder, defaults to "${DEFAULT_SOURCE_DIR}"`,
